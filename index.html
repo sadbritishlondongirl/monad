@@ -19,6 +19,8 @@
         }
         .moving-text-container {
             position: fixed;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
@@ -27,15 +29,16 @@
         .moving-text {
             position: absolute;
             white-space: nowrap;
-            font-size: 80px;
+            font-size: 100px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.1);
             text-transform: uppercase;
         }
-        .text-1 { top: 15%; animation: scrollText 12s linear infinite alternate; }
-        .text-2 { top: 35%; animation: scrollTextReverse 14s linear infinite alternate; }
-        .text-3 { top: 55%; animation: scrollText 16s linear infinite alternate; }
-        .text-4 { top: 75%; animation: scrollTextReverse 18s linear infinite alternate; }
+        .text-1 { top: 10%; animation: scrollText 10s linear infinite; }
+        .text-2 { top: 30%; animation: scrollTextReverse 12s linear infinite; }
+        .text-3 { top: 50%; animation: scrollText 15s linear infinite; }
+        .text-4 { top: 70%; animation: scrollTextReverse 18s linear infinite; }
+        .text-5 { top: 90%; animation: scrollText 20s linear infinite; }
         
         @keyframes scrollText {
             from { transform: translateX(100%); }
@@ -45,29 +48,36 @@
             from { transform: translateX(-100%); }
             to { transform: translateX(100%); }
         }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
         .btn {
-            background: linear-gradient(90deg, #8b5cf6, #6d28d9);
-            padding: 14px 28px;
-            border-radius: 12px;
+            background: #8b5cf6;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-weight: bold;
             transition: 0.3s;
-            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
         }
         .btn:hover {
-            background: linear-gradient(90deg, #6d28d9, #4c1d95);
-            transform: scale(1.05);
+            background: #6d28d9;
         }
-        .popup {
+        .notification {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
+            background: #1f2937;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 20px;
             border-radius: 8px;
             display: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
+        .notification.show {
+            display: block;
+        }
+                }
         .meme-container {
             position: absolute;
             bottom: 10px;
@@ -77,6 +87,7 @@
         }
         .meme-container img {
             width: 100px;
+            height: auto;
         }
         @keyframes float {
             from { transform: translateY(0px); }
@@ -86,38 +97,40 @@
 </head>
 <body class="text-white flex justify-center items-center h-screen relative">
     <div class="moving-text-container">
-        <div class="moving-text text-1">GM MONAD 🚀🚀🚀 &nbsp; GM MONAD</div>
-        <div class="moving-text text-2">MOONAD 🌕🌕🌕 &nbsp; HODL</div>
-        <div class="moving-text text-3">GM STRONG 🐸🐸🐸 &nbsp; LET'S GO</div>
-        <div class="moving-text text-4">PUMP IT 📈📈📈 &nbsp; NO RUG</div>
+        <div class="moving-text text-1">GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD</div>
+        <div class="moving-text text-2">GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD</div>
+        <div class="moving-text text-3">GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD</div>
+        <div class="moving-text text-4">GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD</div>
+        <div class="moving-text text-5">GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD</div>
     </div>
-    <div class="content bg-gray-800 p-8 rounded-2xl shadow-2xl text-center">
-        <h1 class="text-3xl font-bold mb-4">GMonad</h1>
-        <p class="text-md text-gray-400 mb-4">Connect MetaMask and sign the transaction.</p>
+    <div class="content bg-gray-800 p-6 rounded-xl shadow-2xl text-center w-96">
+        <h1 class="text-2xl font-bold mb-4">GMonad</h1>
+        <p class="text-sm text-gray-400 mb-4">Connect MetaMask and sign the transaction.</p>
         <button id="sendTx" class="btn">GM Monad!</button>
     </div>
-    <div class="popup" id="popup">Message</div>
+        </div>
     <div class="meme-container">
         <img src="https://i.ibb.co/GvDjpRkg/image-removebg-preview-22.png" alt="Pepe meme">
     </div>
+    <div id="notification" class="notification"></div>
 <script>
-    function showPopup(message) {
-        const popup = document.getElementById("popup");
-        popup.textContent = message;
-        popup.style.display = "block";
-        setTimeout(() => { popup.style.display = "none"; }, 3000);
+    function showNotification(message) {
+        const notification = document.getElementById("notification");
+        notification.textContent = message;
+        notification.classList.add("show");
+        setTimeout(() => notification.classList.remove("show"), 4000);
     }
 
     document.getElementById("sendTx").addEventListener("click", async () => {
         if (!window.ethereum) {
-            showPopup("Install MetaMask");
+            showNotification("Install MetaMask");
             return;
         }
         const web3 = new Web3(window.ethereum);
         try {
             const accounts = await ethereum.request({ method: "eth_requestAccounts" });
             if (accounts.length === 0) {
-                showPopup("Connect your MetaMask wallet");
+                showNotification("Connect your MetaMask wallet");
                 return;
             }
             await ethereum.request({
@@ -134,9 +147,9 @@
                 method: 'eth_sendTransaction',
                 params: [txParams]
             });
-            showPopup("Transaction sent: " + txHash);
+            showNotification("Transaction sent: " + txHash);
         } catch (error) {
-            showPopup("Error: " + error.message);
+            showNotification("Error: " + error.message);
         }
     });
 </script>
