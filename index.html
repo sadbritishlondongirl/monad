@@ -213,10 +213,9 @@
         }
     });
     setTimeout(() => {
-    const wave = document.querySelector(".wave-overlay");
-    wave.style.opacity = "0";  
+    document.querySelector(".wave-overlay").style.opacity = "0";
     setTimeout(() => {
-        wave.style.display = "none"; // Полностью скрываем элемент
+        document.querySelector(".wave-overlay").style.display = "none";
     }, 500); // Даем время на плавное исчезновение
 }, 2500);
     setTimeout(() => {
@@ -225,7 +224,7 @@
         gmText.style.opacity = "0";
         setTimeout(() => {
             gmText.style.display = "none"; // Полностью убираем элемент
-        }, 500);
+        }, 10);
     }
 }, 2000);
     setTimeout(() => {
