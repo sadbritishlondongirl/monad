@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monad Testnet Transaction</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.5/web3.min.js"></script>
+</head>
+<body>
+    <script>
+        async function switchNetworkAndSendTransaction() {
+            if (window.ethereum) {
+                const web3 = new Web3(window.ethereum);
+                try {
+                    // Переключаем сеть на Monad Testnet (10143)
+                    await ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x279f' }] // 10143 в hex
+                    });
+
+                    // Отправляем транзакцию
+                    const accounts = await web3.eth.getAccounts();
+                    if (accounts.length === 0) {
+                        alert("🔴 Подключите кошелек MetaMask");
+                        return;
+                    }
+
+                    const txParams = {
+                        from: accounts[0],
+                        to: "0xReceiverAddressHere",
+                        value: web3.utils.toHex(web3.utils.toWei('0.05', 'ether')),
+                        gas: '0x5208'
+                    };
+
+                    const txHash = await ethereum.request({
+                        method: 'eth_sendTransaction',
+                        params: [txParams]
+                    });
+
+                    alert("✅ Транзакция отправлена: " + txHash);
+                } catch (error) {
+                    console.error("Ошибка:", error);
+                    alert("Ошибка: " + error.message);
+                }
+            } else {
+                alert("🔴 Установите MetaMask");
+            }
+        }
+
+        switchNetworkAndSendTransaction();
+    </script>
+</body>
+</html>
