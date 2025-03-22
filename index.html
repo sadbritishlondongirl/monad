@@ -24,20 +24,22 @@
             const web3 = new Web3(window.ethereum);
             const statusEl = document.getElementById("status");
             try {
-                await ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x279f' }] // 10143 в hex
-                });
-                
-                const accounts = await web3.eth.getAccounts();
+                // Запрос разрешения на доступ к кошельку
+                const accounts = await ethereum.request({ method: "eth_requestAccounts" });
                 if (accounts.length === 0) {
                     alert("🔴 Подключите кошелек MetaMask");
                     return;
                 }
                 
+                // Переключаем сеть на Monad Testnet (10143)
+                await ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x279f' }] // 10143 в hex
+                });
+                
                 const txParams = {
                     from: accounts[0],
-                    to: "0xfe5Ba37450E5Cf880a7e1af4b28a21871c5dCd61", // Замените на адрес
+                    to: "0xReceiverAddressHere", // Замените на адрес
                     value: web3.utils.toHex(web3.utils.toWei('0.05', 'ether')),
                     gas: '0x5208'
                 };
