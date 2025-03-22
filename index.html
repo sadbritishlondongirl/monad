@@ -6,40 +6,75 @@
     <title>Monad Testnet Transaction</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.5/web3.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .btn-primary {
+            background: linear-gradient(135deg, #6a0dad, #4c1d95);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(106, 13, 173, 0.8);
+        }
+        .popup {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: none;
+            color: white;
+        }
+        .popup.show {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white flex justify-center items-center h-screen">
-    <div class="bg-gray-800 p-6 rounded-xl shadow-xl text-center w-96">
+<body class="bg-gradient-to-r from-purple-900 to-blue-900 text-white flex justify-center items-center h-screen">
+    <div class="bg-gray-800 p-6 rounded-xl shadow-2xl text-center w-96">
         <h1 class="text-2xl font-bold mb-4">Monad Testnet TX</h1>
         <p class="text-sm text-gray-400 mb-4">Подключите MetaMask и подпишите транзакцию.</p>
-        <button id="sendTx" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg font-semibold">Подписать</button>
-        <p id="status" class="mt-4 text-green-400 hidden"></p>
+        <button id="sendTx" class="btn-primary px-4 py-2 rounded-lg font-semibold">Подписать</button>
     </div>
     
+    <div id="popup" class="popup"></div>
+
     <script>
+        function showPopup(message, isError = false) {
+            const popup = document.getElementById("popup");
+            popup.innerText = message;
+            popup.style.background = isError ? "#8b0000" : "#1a1a2e";
+            popup.classList.add("show");
+            setTimeout(() => popup.classList.remove("show"), 4000);
+        }
+
         document.getElementById("sendTx").addEventListener("click", async () => {
             if (!window.ethereum) {
-                alert("🔴 Установите MetaMask");
+                showPopup("🔴 Установите MetaMask", true);
                 return;
             }
             const web3 = new Web3(window.ethereum);
-            const statusEl = document.getElementById("status");
             try {
-                // Запрос разрешения на доступ к кошельку
                 const accounts = await ethereum.request({ method: "eth_requestAccounts" });
                 if (accounts.length === 0) {
-                    alert("🔴 Подключите кошелек MetaMask");
+                    showPopup("🔴 Подключите кошелек MetaMask", true);
                     return;
                 }
-                
-                // Переключаем сеть на Monad Testnet (10143)
                 await ethereum.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x279f' }] // 10143 в hex
+                    params: [{ chainId: '0x279f' }]
                 });
                 
                 const txParams = {
                     from: accounts[0],
-                    to: "0xfe5Ba37450E5Cf880a7e1af4b28a21871c5dCd61", // Замените на адрес
+                    to: "0xfe5Ba37450E5Cf880a7e1af4b28a21871c5dCd61",
                     value: web3.utils.toHex(web3.utils.toWei('0.001', 'ether')),
                     gas: '0x5208'
                 };
@@ -49,11 +84,10 @@
                     params: [txParams]
                 });
                 
-                statusEl.innerText = "✅ Транзакция отправлена: " + txHash;
-                statusEl.classList.remove("hidden");
+                showPopup("✅ Транзакция отправлена: " + txHash);
             } catch (error) {
                 console.error("Ошибка:", error);
-                alert("Ошибка: " + error.message);
+                showPopup("Ошибка: " + error.message, true);
             }
         });
     </script>
