@@ -154,6 +154,38 @@
             0% { transform: translateY(0); }
             100% { transform: translateY(100%); }
         }
+
+        .icon-container {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+        .icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .icon img {
+            width: 24px;
+            height: 24px;
+            opacity: 0.8;
+        }
+        .icon:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
     </style>
 </head>
 <body class="text-white flex justify-center items-center h-screen relative">
@@ -161,6 +193,17 @@
 
     <div class="gm-container">
         <h1 class="gm-text"><span class="font-bold text-purple-400"><span class="font-bold text-purple-400">GM</span>onad</span></h1>
+    </div>
+    <div class="icon-container">
+        <a href="#" class="icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="TG"> Our Faucet
+        </a>
+        <a href="#" class="icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968949.png" alt="Magic Eden"> NFT Collection
+        </a>
+        <a href="#" class="icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/25/25657.png" alt="$"> Our Token
+        </a>
     </div>
     <div class="moving-text-container">
     <div class="moving-text text-1">GM MONAD MOONAD &nbsp; GM MONAD</div>
