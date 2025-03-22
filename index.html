@@ -219,6 +219,18 @@
         wave.style.display = "none"; // Полностью скрываем элемент
     }, 500); // Даем время на плавное исчезновение
 }, 2500);
+    setTimeout(() => {
+    const gmText = document.querySelector(".gm-container");
+    if (gmText) {
+        gmText.style.opacity = "0";
+        setTimeout(() => {
+            gmText.style.display = "none"; // Полностью убираем элемент
+        }, 500);
+    }
+}, 2000);
+    setTimeout(() => {
+    document.querySelector(".gm-container").style.pointerEvents = "none";
+}, 2000);
 </script>
 </body>
 </html>
