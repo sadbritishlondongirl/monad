@@ -17,11 +17,17 @@
             50% { background: #4c1d95; }
             100% { background: #1e3a8a; }
         }
-        .moving-text {
+        .moving-text-container {
             position: absolute;
             width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .moving-text {
+            position: absolute;
             white-space: nowrap;
-            font-size: 100px;
+            font-size: 80px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.1);
             text-transform: uppercase;
@@ -31,49 +37,39 @@
             from { transform: translateX(100%); }
             to { transform: translateX(-100%); }
         }
-        .content {
-            position: relative;
-            z-index: 1;
-        }
         .btn {
-            background: #8b5cf6;
-            padding: 10px 20px;
-            border-radius: 8px;
+            background: linear-gradient(45deg, #8b5cf6, #6d28d9);
+            padding: 12px 24px;
+            border-radius: 12px;
             font-weight: bold;
-            transition: 0.3s;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.5);
         }
         .btn:hover {
-            background: #6d28d9;
+            transform: scale(1.05);
+            background: linear-gradient(45deg, #6d28d9, #4c1d95);
         }
-        .modal {
-            display: none;
+        .toast {
             position: fixed;
-            top: 50%;
+            bottom: 20px;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             background: #1f2937;
-            padding: 20px;
+            color: white;
+            padding: 12px 20px;
             border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-in-out;
         }
-        .modal.show {
-            display: block;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="text-white flex justify-center items-center h-screen relative">
-    <div class="moving-text">GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD</div>
-    <div class="content bg-gray-800 p-6 rounded-xl shadow-2xl text-center w-96">
-        <h1 class="text-2xl font-bold mb-4">Monad Testnet TX</h1>
-        <p class="text-sm text-gray-400 mb-4">Подключите MetaMask и подпишите транзакцию.</p>
-        <button id="sendTx" class="btn">Подписать</button>
-    </div>
-    
-    <div id="modal" class="modal">
-        <p id="modal-text"></p>
-        <button onclick="closeModal()" class="btn mt-4">Закрыть</button>
-    </div>
+    <div class="moving-text-container">
     
     <script>
         function showModal(message) {
