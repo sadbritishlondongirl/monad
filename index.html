@@ -91,17 +91,18 @@
             to { transform: translateY(-10px); }
         }
         .wave-overlay {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #6a0dad;
-            z-index: 1000;
-            clip-path: circle(150% at 50% 100%);
-            animation: waveFill 2.5s ease-in-out forwards;
-            pointer-events: none;
-        }
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #6a0dad;
+    z-index: 1000;
+    clip-path: circle(150% at 50% 100%);
+    animation: waveFill 2.5s ease-in-out forwards;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
+}
 
         @keyframes waveFill {
             0% { clip-path: circle(150% at 50% 100%); }
@@ -211,6 +212,12 @@
             showPopup("Error: " + error.message);
         }
     });
+    setTimeout(() => {
+    document.querySelector(".wave-overlay").style.opacity = "0";
+    setTimeout(() => {
+        document.querySelector(".wave-overlay").style.display = "none";
+    }, 500); // Даем время на плавное исчезновение
+}, 2500);
 </script>
 </body>
 </html>
