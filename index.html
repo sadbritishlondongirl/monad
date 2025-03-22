@@ -90,9 +90,30 @@
             from { transform: translateY(0px); }
             to { transform: translateY(-10px); }
         }
+        .wave-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #6a0dad;
+    z-index: 1000;
+    clip-path: circle(150% at 50% 100%);
+    animation: waveFill 2.5s ease-in-out forwards;
+}
+
+@keyframes waveFill {
+    0% {
+        clip-path: circle(150% at 50% 100%);
+    }
+    100% {
+        clip-path: circle(0% at 50% 100%);
+    }
+}
     </style>
 </head>
 <body class="text-white flex justify-center items-center h-screen relative">
+    <div class="wave-overlay"></div>
     <div class="moving-text-container">
         <div class="moving-text text-1">GM MONAD MOONAD &nbsp; GM MONAD</div>
         <div class="moving-text text-2">MOONAD GM &nbsp; HODL</div>
