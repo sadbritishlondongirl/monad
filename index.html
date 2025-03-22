@@ -88,9 +88,9 @@
         <div class="moving-text text-5">GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD</div>
     </div>
     <div class="content bg-gray-800 p-6 rounded-xl shadow-2xl text-center w-96">
-        <h1 class="text-2xl font-bold mb-4">Monad Testnet TX</h1>
-        <p class="text-sm text-gray-400 mb-4">Подключите MetaMask и подпишите транзакцию.</p>
-        <button id="sendTx" class="btn">Подписать</button>
+        <h1 class="text-2xl font-bold mb-4">GMonad</h1>
+        <p class="text-sm text-gray-400 mb-4">Connect MetaMask and sign the transaction.</p>
+        <button id="sendTx" class="btn">GM Monad!</button>
     </div>
     <div id="notification" class="notification"></div>
 <script>
@@ -103,14 +103,14 @@
 
     document.getElementById("sendTx").addEventListener("click", async () => {
         if (!window.ethereum) {
-            showNotification("Установите MetaMask");
+            showNotification("Install MetaMask");
             return;
         }
         const web3 = new Web3(window.ethereum);
         try {
             const accounts = await ethereum.request({ method: "eth_requestAccounts" });
             if (accounts.length === 0) {
-                showNotification("Подключите кошелек MetaMask");
+                showNotification("Connect your MetaMask wallet");
                 return;
             }
             await ethereum.request({
@@ -127,9 +127,9 @@
                 method: 'eth_sendTransaction',
                 params: [txParams]
             });
-            showNotification("Транзакция отправлена: " + txHash);
+            showNotification("Transaction sent: " + txHash);
         } catch (error) {
-            showNotification("Ошибка: " + error.message);
+            showNotification("Error: " + error.message);
         }
     });
 </script>
