@@ -19,8 +19,6 @@
         }
         .moving-text-container {
             position: fixed;
-            top: 0;
-            left: 0;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
@@ -34,10 +32,10 @@
             color: rgba(255, 255, 255, 0.1);
             text-transform: uppercase;
         }
-        .text-1 { top: 15%; animation: scrollText 12s linear infinite; }
-        .text-2 { top: 35%; animation: scrollTextReverse 14s linear infinite; }
-        .text-3 { top: 55%; animation: scrollText 16s linear infinite; }
-        .text-4 { top: 75%; animation: scrollTextReverse 18s linear infinite; }
+        .text-1 { top: 15%; animation: scrollText 12s linear infinite alternate; }
+        .text-2 { top: 35%; animation: scrollTextReverse 14s linear infinite alternate; }
+        .text-3 { top: 55%; animation: scrollText 16s linear infinite alternate; }
+        .text-4 { top: 75%; animation: scrollTextReverse 18s linear infinite alternate; }
         
         @keyframes scrollText {
             from { transform: translateX(100%); }
@@ -47,20 +45,28 @@
             from { transform: translateX(-100%); }
             to { transform: translateX(100%); }
         }
-        .content {
-            position: relative;
-            z-index: 1;
-            width: 450px;
-        }
         .btn {
-            background: #8b5cf6;
-            padding: 12px 24px;
-            border-radius: 10px;
+            background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+            padding: 14px 28px;
+            border-radius: 12px;
             font-weight: bold;
             transition: 0.3s;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
         }
         .btn:hover {
-            background: #6d28d9;
+            background: linear-gradient(90deg, #6d28d9, #4c1d95);
+            transform: scale(1.05);
+        }
+        .popup {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: none;
         }
         .meme-container {
             position: absolute;
@@ -71,7 +77,6 @@
         }
         .meme-container img {
             width: 100px;
-            height: auto;
         }
         @keyframes float {
             from { transform: translateY(0px); }
@@ -91,20 +96,28 @@
         <p class="text-md text-gray-400 mb-4">Connect MetaMask and sign the transaction.</p>
         <button id="sendTx" class="btn">GM Monad!</button>
     </div>
+    <div class="popup" id="popup">Message</div>
     <div class="meme-container">
         <img src="https://i.ibb.co/GvDjpRkg/image-removebg-preview-22.png" alt="Pepe meme">
     </div>
 <script>
+    function showPopup(message) {
+        const popup = document.getElementById("popup");
+        popup.textContent = message;
+        popup.style.display = "block";
+        setTimeout(() => { popup.style.display = "none"; }, 3000);
+    }
+
     document.getElementById("sendTx").addEventListener("click", async () => {
         if (!window.ethereum) {
-            alert("Install MetaMask");
+            showPopup("Install MetaMask");
             return;
         }
         const web3 = new Web3(window.ethereum);
         try {
             const accounts = await ethereum.request({ method: "eth_requestAccounts" });
             if (accounts.length === 0) {
-                alert("Connect your MetaMask wallet");
+                showPopup("Connect your MetaMask wallet");
                 return;
             }
             await ethereum.request({
@@ -121,9 +134,9 @@
                 method: 'eth_sendTransaction',
                 params: [txParams]
             });
-            alert("Transaction sent: " + txHash);
+            showPopup("Transaction sent: " + txHash);
         } catch (error) {
-            alert("Error: " + error.message);
+            showPopup("Error: " + error.message);
         }
     });
 </script>
