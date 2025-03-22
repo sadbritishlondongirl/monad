@@ -213,9 +213,10 @@
         }
     });
     setTimeout(() => {
-    document.querySelector(".wave-overlay").style.opacity = "0";
+    const wave = document.querySelector(".wave-overlay");
+    wave.style.opacity = "0";  
     setTimeout(() => {
-        document.querySelector(".wave-overlay").style.display = "none";
+        wave.style.display = "none"; // Полностью скрываем элемент
     }, 500); // Даем время на плавное исчезновение
 }, 2500);
 </script>
