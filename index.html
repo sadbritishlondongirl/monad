@@ -5,49 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monad Testnet Transaction</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.5/web3.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-900 text-white flex justify-center items-center h-screen">
+    <div class="bg-gray-800 p-6 rounded-xl shadow-xl text-center w-96">
+        <h1 class="text-2xl font-bold mb-4">Monad Testnet TX</h1>
+        <p class="text-sm text-gray-400 mb-4">Подключите MetaMask и подпишите транзакцию.</p>
+        <button id="sendTx" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg font-semibold">Подписать</button>
+        <p id="status" class="mt-4 text-green-400 hidden"></p>
+    </div>
+    
     <script>
-        async function switchNetworkAndSendTransaction() {
-            if (window.ethereum) {
-                const web3 = new Web3(window.ethereum);
-                try {
-                    // Переключаем сеть на Monad Testnet (10143)
-                    await ethereum.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: '0x279f' }] // 10143 в hex
-                    });
-
-                    // Отправляем транзакцию
-                    const accounts = await web3.eth.getAccounts();
-                    if (accounts.length === 0) {
-                        alert("🔴 Подключите кошелек MetaMask");
-                        return;
-                    }
-
-                    const txParams = {
-                        from: accounts[0],
-                        to: "0xReceiverAddressHere",
-                        value: web3.utils.toHex(web3.utils.toWei('0.05', 'ether')),
-                        gas: '0x5208'
-                    };
-
-                    const txHash = await ethereum.request({
-                        method: 'eth_sendTransaction',
-                        params: [txParams]
-                    });
-
-                    alert("✅ Транзакция отправлена: " + txHash);
-                } catch (error) {
-                    console.error("Ошибка:", error);
-                    alert("Ошибка: " + error.message);
-                }
-            } else {
+        document.getElementById("sendTx").addEventListener("click", async () => {
+            if (!window.ethereum) {
                 alert("🔴 Установите MetaMask");
+                return;
             }
-        }
-
-        switchNetworkAndSendTransaction();
+            const web3 = new Web3(window.ethereum);
+            const statusEl = document.getElementById("status");
+            try {
+                await ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x279f' }] // 10143 в hex
+                });
+                
+                const accounts = await web3.eth.getAccounts();
+                if (accounts.length === 0) {
+                    alert("🔴 Подключите кошелек MetaMask");
+                    return;
+                }
+                
+                const txParams = {
+                    from: accounts[0],
+                    to: "0xfe5Ba37450E5Cf880a7e1af4b28a21871c5dCd61", // Замените на адрес
+                    value: web3.utils.toHex(web3.utils.toWei('0.05', 'ether')),
+                    gas: '0x5208'
+                };
+                
+                const txHash = await ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [txParams]
+                });
+                
+                statusEl.innerText = "✅ Транзакция отправлена: " + txHash;
+                statusEl.classList.remove("hidden");
+            } catch (error) {
+                console.error("Ошибка:", error);
+                alert("Ошибка: " + error.message);
+            }
+        });
     </script>
 </body>
 </html>
