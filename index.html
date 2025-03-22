@@ -91,29 +91,47 @@
             to { transform: translateY(-10px); }
         }
         .wave-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #6a0dad;
-    z-index: 1000;
-    clip-path: circle(150% at 50% 100%);
-    animation: waveFill 2.5s ease-in-out forwards;
-}
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #6a0dad;
+        z-index: 1000;
+        animation: waveFill 2.5s ease-in-out forwards;
+        clip-path: path("M0,100 Q50,50 100,100 T200,100 T300,100 T400,100 T500,100 V200 H0 Z");
+    }
 
-@keyframes waveFill {
-    0% {
-        clip-path: circle(150% at 50% 100%);
+    @keyframes waveFill {
+        0% { clip-path: path("M0,200 Q50,200 100,200 T200,200 T300,200 T400,200 T500,200 V200 H0 Z"); }
+        50% { clip-path: path("M0,150 Q50,100 100,150 T200,100 T300,150 T400,100 T500,150 V200 H0 Z"); }
+        100% { clip-path: path("M0,0 Q50,50 100,0 T200,0 T300,0 T400,0 T500,0 V200 H0 Z"); }
     }
-    100% {
-        clip-path: circle(0% at 50% 100%);
+
+    .gm-text {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 100px;
+        font-weight: bold;
+        color: white;
+        opacity: 0;
+        animation: fadeIn 2s ease-in-out forwards;
+        z-index: 1001;
     }
-}
+
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: scale(0.8); }
+        100% { opacity: 1; transform: scale(1); }
+    }
     </style>
 </head>
 <body class="text-white flex justify-center items-center h-screen relative">
     <div class="wave-overlay"></div>
+    <div class="gm-text">GM</div>
     <div class="moving-text-container">
         <div class="moving-text text-1">GM MONAD MOONAD &nbsp; GM MONAD</div>
         <div class="moving-text text-2">MOONAD GM &nbsp; HODL</div>
