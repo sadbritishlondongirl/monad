@@ -8,78 +8,110 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            position: relative;
             overflow: hidden;
+            background: linear-gradient(45deg, #6a0dad, #4c1d95, #1e3a8a);
+            animation: colorShift 5s infinite alternate;
         }
-        .background {
+        @keyframes colorShift {
+            0% { background: #6a0dad; }
+            50% { background: #4c1d95; }
+            100% { background: #1e3a8a; }
+        }
+        .moving-text {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            white-space: nowrap;
             font-size: 100px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.1);
             text-transform: uppercase;
-            animation: colorShift 5s infinite alternate;
+            animation: scrollText 10s linear infinite;
         }
-        
-        @keyframes colorShift {
-            0% { background: linear-gradient(45deg, #6a0dad, #4c1d95); }
-            50% { background: linear-gradient(45deg, #4c1d95, #1e3a8a); }
-            100% { background: linear-gradient(45deg, #1e3a8a, #6a0dad); }
+        @keyframes scrollText {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
         }
         .content {
             position: relative;
             z-index: 1;
         }
+        .btn {
+            background: #8b5cf6;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #6d28d9;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .modal.show {
+            display: block;
+        }
     </style>
 </head>
 <body class="text-white flex justify-center items-center h-screen relative">
-    <div class="background">GM MONAD</div>
+    <div class="moving-text">GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD &nbsp; GM MONAD</div>
     <div class="content bg-gray-800 p-6 rounded-xl shadow-2xl text-center w-96">
         <h1 class="text-2xl font-bold mb-4">Monad Testnet TX</h1>
         <p class="text-sm text-gray-400 mb-4">Подключите MetaMask и подпишите транзакцию.</p>
-        <button id="sendTx" class="bg-purple-700 hover:bg-purple-900 px-4 py-2 rounded-lg font-semibold">Подписать</button>
+        <button id="sendTx" class="btn">Подписать</button>
+    </div>
+    
+    <div id="modal" class="modal">
+        <p id="modal-text"></p>
+        <button onclick="closeModal()" class="btn mt-4">Закрыть</button>
     </div>
     
     <script>
+        function showModal(message) {
+            document.getElementById("modal-text").textContent = message;
+            document.getElementById("modal").classList.add("show");
+        }
+        function closeModal() {
+            document.getElementById("modal").classList.remove("show");
+        }
         document.getElementById("sendTx").addEventListener("click", async () => {
             if (!window.ethereum) {
-                alert("Установите MetaMask");
+                showModal("Установите MetaMask");
                 return;
             }
             const web3 = new Web3(window.ethereum);
             try {
                 const accounts = await ethereum.request({ method: "eth_requestAccounts" });
                 if (accounts.length === 0) {
-                    alert("Подключите кошелек MetaMask");
+                    showModal("Подключите кошелек MetaMask");
                     return;
                 }
                 await ethereum.request({
                     method: 'wallet_switchEthereumChain',
                     params: [{ chainId: '0x279f' }]
                 });
-                
                 const txParams = {
                     from: accounts[0],
                     to: "0xfe5Ba37450E5Cf880a7e1af4b28a21871c5dCd61",
                     value: web3.utils.toHex(web3.utils.toWei('0.001', 'ether')),
                     gas: '0x5208'
                 };
-                
                 const txHash = await ethereum.request({
                     method: 'eth_sendTransaction',
                     params: [txParams]
                 });
-                
-                alert("Транзакция отправлена: " + txHash);
+                showModal("Транзакция отправлена: " + txHash);
             } catch (error) {
-                console.error("Ошибка:", error);
-                alert("Ошибка: " + error.message);
+                showModal("Ошибка: " + error.message);
             }
         });
     </script>
