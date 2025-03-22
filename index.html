@@ -104,7 +104,7 @@
 
         @keyframes waveFill {
             0% { clip-path: circle(150% at 50% 100%); }
-            100% { clip-path: circle(0% at 50% 100%); }
+            100% { clip-path: circle(0% at 50% 150%); }
         }
 
         /* Контейнер для текста GM */
@@ -115,6 +115,7 @@
             text-align: center;
             z-index: 1001;
             animation: moveDown 2.5s ease-in-out forwards;
+        }
 
         /* Текст "GM" */
         .gm-text {
@@ -123,12 +124,11 @@
             text-transform: uppercase;
             color: white;
             opacity: 1;
-            transition: opacity 0.5s;
         }
 
-        @keyframes moveUp {
+        @keyframes moveDown {
             0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(100%); opacity: 0; }
         }
 
         /* SVG-волна */
@@ -143,7 +143,7 @@
 
         @keyframes waveMove {
             0% { transform: translateY(0); }
-            100% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
         }
     </style>
 </head>
