@@ -87,6 +87,15 @@
         .meme-container img {
             width: 200px;
         }
+        .popup {
+            position: absolute;
+            background-color: white;
+            border: 1px solid black;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
         @keyframes float {
             from { transform: translateY(0px); }
             to { transform: translateY(-10px); }
@@ -219,13 +228,13 @@
         <button id="sendTx" class="btn">GM Monad!</button>
     </div>
 </div>
-    <div class="popup" id="popup">Message</div>
-    <div class="meme-container">
+        <div class="meme-container" id="meme1">
         <img src="https://i.ibb.co/GvDjpRkg/image-removebg-preview-22.png" alt="Pepe meme">
+        <div class="popup" id="popup">Sup</div>
     </div>
-        <div class="meme-container" style="top: 10px; right: 10px; left: auto; width: 120px;">
-    <img src="https://i.ibb.co/9k6XrnLx/image-removebg-preview-23.png" alt="Another Pepe meme" style="width: 120px;">
-</div>
+    <div class="meme-container" style="top: 10px; right: 10px; left: auto; width: 120px;">
+        <img src="https://i.ibb.co/9k6XrnLx/image-removebg-preview-23.png" alt="Another Pepe meme" style="width: 120px;">
+    </div>
 <script>
     function showPopup(message) {
     const popup = document.getElementById("popup");
@@ -329,6 +338,15 @@ if (cooldown > 0) {
     setTimeout(() => {
     document.querySelector(".gm-container").style.pointerEvents = "none";
 }, 2000);
+    const meme = document.getElementById("meme1");
+        const popup = document.getElementById("popup");
+
+        meme.addEventListener("mouseenter", () => {
+            popup.style.display = "block";
+        });
+        meme.addEventListener("mouseleave", () => {
+            popup.style.display = "none";
+        });
 </script>
 </body>
 </html>
