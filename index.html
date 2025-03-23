@@ -304,6 +304,8 @@ if (cooldown > 0) {
     } catch (error) {
         if (error.message.includes("Too many request, try again later")) {
             showPopup("❌ Too many requests. Please try again later.");
+        } else if (error.code === 28 || error.message.includes("Request timeout")) {
+            showPopup("⚠️ Request timeout. Please try again later.");
         } else {
             showPopup("Error: " + error.message);
         }
