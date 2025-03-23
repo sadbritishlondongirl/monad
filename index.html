@@ -331,15 +331,17 @@ if (cooldown > 0) {
     setTimeout(() => {
     document.querySelector(".gm-container").style.pointerEvents = "none";
 }, 2000);
-    const meme = document.getElementById("meme1");
-        const popup = document.getElementById("popup");
+    document.querySelectorAll(".meme-container").forEach(container => {
+    const popup = container.querySelector(".popup");
 
-        meme.addEventListener("mouseenter", () => {
-            popup.style.display = "block";
-        });
-        meme.addEventListener("mouseleave", () => {
-            popup.style.display = "none";
-        });
+    container.addEventListener("mouseenter", () => {
+        popup.style.display = "block";
+    });
+
+    container.addEventListener("mouseleave", () => {
+        popup.style.display = "none";
+    });
+});
 </script>
 </body>
 </html>
