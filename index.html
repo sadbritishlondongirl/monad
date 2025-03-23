@@ -271,16 +271,22 @@ document.getElementById("sendTx").addEventListener("click", async () => {
 
         // Проверяем кулдаун перед транзакцией
         const cooldown = await contract.methods.getCooldownTime(sender).call();
-        if (cooldown > 0) {
-            showPopup(`⏳ The next GM will be available in ${Math.ceil(cooldown / 60)} minutes.`);
-            return;
-        }
+if (cooldown > 0) {
+    const hours = Math.floor(cooldown / 3600);
+    const minutes = Math.ceil((cooldown % 3600) / 60);
+    let timeMessage = "⏳ The next GM will be available in ";
 
-        await ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x279f" }]
-        });
+    if (hours > 0) {
+        timeMessage += `${hours}h `;
+    }
+    if (minutes > 0) {
+        timeMessage += `${minutes}m`;
+    }
 
+    showPopup(timeMessage.trim() + ".");
+    return;
+}
+        
         const valueToSend = web3.utils.toWei("0.001", "ether");
 
         const gasEstimate = await contract.methods.greetAndSend().estimateGas({
