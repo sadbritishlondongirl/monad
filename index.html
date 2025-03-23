@@ -316,14 +316,20 @@ if (cooldown > 0) {
 
         showPopup("🚀 GM Successful! TX: " + tx.transactionHash);
     } catch (error) {
-        if (error.message.includes("Too many request, try again later")) {
-            showPopup("❌ Too many requests. Please try again later.");
-        } else if (error.code === 28 || error.message.includes("Request timeout")) {
-            showPopup("⚠️ Request timeout. Please try again later.");
-        } else {
-            showPopup("Error: " + error.message);
+            if (error.message.includes("Too many request, try again later")) {
+                showPopup("❌ Too many requests. Please try again later.");
+            } else if (error.code === 28 || error.message.includes("Request timeout")) {
+                showPopup("⚠️ Request timeout. Please try again later.");
+            } else if (error.message.includes("insufficient funds")) {
+                showPopup("❌ Insufficient funds in wallet.");
+            } else if (error.message.includes("execution reverted")) {
+                showPopup("⚠️ Transaction failed: execution reverted.");
+            } else if (error.message.includes("Non-200 status code: '500'") || error.code === 19) {
+        showPopup("⚠️ Request failed. Please try again later");
+            } else {
+                showPopup("Error: " + error.message);
+            }
         }
-    }
 });
     setTimeout(() => {
     document.querySelector(".wave-overlay").style.opacity = "0";
