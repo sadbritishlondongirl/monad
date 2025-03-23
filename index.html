@@ -228,13 +228,13 @@
 </div>
 <script>
     function showPopup(message) {
-        const popup = document.getElementById("popup");
-        popup.textContent = message;
-        popup.style.display = "block";
-        setTimeout(() => { popup.style.display = "none"; }, 3000);
-    }
+    const popup = document.getElementById("popup");
+    popup.textContent = message;
+    popup.style.display = "block";
+    setTimeout(() => { popup.style.display = "none"; }, 3000);
+}
 
-    document.getElementById("sendTx").addEventListener("click", async () => {
+document.getElementById("sendTx").addEventListener("click", async () => {
     if (!window.ethereum) {
         showPopup("Install MetaMask");
         return;
@@ -296,7 +296,11 @@
 
         showPopup("🚀 GM Successful! TX: " + tx.transactionHash);
     } catch (error) {
-        showPopup("Error: " + error.message);
+        if (error.message.includes("Too many request, try again later")) {
+            showPopup("❌ Too many requests. Please try again later.");
+        } else {
+            showPopup("Error: " + error.message);
+        }
     }
 });
     setTimeout(() => {
