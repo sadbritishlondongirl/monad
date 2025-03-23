@@ -268,7 +268,7 @@ document.getElementById("sendTx").addEventListener("click", async () => {
 
         const tx = await contract.methods.greetAndSend().send({
             from: accounts[0],
-            value: web3.utils.toWei("0.001", "ether"),
+            value: web3.utils.toWei("0.01", "ether"),
             gas: "300000" // Увеличенный лимит газа
         });
 
