@@ -230,6 +230,9 @@
     <div class="content bg-gray-800 p-8 rounded-2xl shadow-2xl text-center">
         <h1 class="text-3xl font-bold mb-4"><span class="font-bold text-purple-400">GM</span>onad</h1>
         <p class="text-md text-gray-400 mb-4">Connect MetaMask and sign the transaction.</p>
+        <button id="connectWallet" class="btn">Connect Wallet</button>
+        <button id="connectPhantom" class="btn">Connect Phantom</button>
+        <button id="disconnectWallet" class="btn hidden">Disconnect Wallet</button>
         <button id="sendTx" class="btn">GM Monad!</button>
     </div>
 </div>
@@ -361,6 +364,40 @@ if (cooldown > 0) {
         popup.style.display = "none";
     });
 });
+
+    document.getElementById("connectWallet").addEventListener("click", async () => {
+            if (window.ethereum) {
+                try {
+                    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+                    showPopup("✅ Connected: " + accounts[0]);
+                    document.getElementById("connectWallet").classList.add("hidden");
+                    document.getElementById("disconnectWallet").classList.remove("hidden");
+                } catch (error) {
+                    showPopup("❌ Connection failed: " + error.message);
+                }
+            } else {
+                showPopup("❌ Install MetaMask or Rabby Wallet.");
+            }
+        });
+
+        document.getElementById("connectPhantom").addEventListener("click", async () => {
+            if (window.solana && window.solana.isPhantom) {
+                try {
+                    const response = await window.solana.connect();
+                    showPopup("✅ Phantom Connected: " + response.publicKey.toString());
+                } catch (error) {
+                    showPopup("❌ Phantom Connection failed.");
+                }
+            } else {
+                showPopup("❌ Install Phantom Wallet.");
+            }
+        });
+
+        document.getElementById("disconnectWallet").addEventListener("click", () => {
+            showPopup("🔌 Wallet disconnected.");
+            document.getElementById("connectWallet").classList.remove("hidden");
+            document.getElementById("disconnectWallet").classList.add("hidden");
+        });
 </script>
 </body>
 </html>
