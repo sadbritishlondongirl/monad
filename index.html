@@ -302,7 +302,7 @@ if (cooldown > 0) {
     return;
 }
         
-        const valueToSend = web3.utils.toWei("0.001", "ether");
+        const valueToSend = web3.utils.toWei("0.011", "ether");
 
         const gasEstimate = await contract.methods.greetAndSend().estimateGas({
             from: sender,
